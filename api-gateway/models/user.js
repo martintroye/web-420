@@ -24,4 +24,14 @@ let userSchema = new Schema({
 // Export the User model set to the user schema
 module.exports = mongoose.model('User', userSchema);
 
+module.exports.add = (user, callback) => {
+  user.save(callback);
+};
+
+module.exports.getById = (id, callback) =>{
+  var query = {_id: id};
+  User.findById(query, callback);
+}
+
+
 // end program
