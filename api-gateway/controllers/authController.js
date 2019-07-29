@@ -17,6 +17,7 @@ var bcrypt = require('bcryptjs');
 // Declare the config variable and import the config model
 var config = require('../config');
 
+
 /*
 ; Params: req: Request, res: Response
 ; Response: none
@@ -65,23 +66,30 @@ exports.user_token = function(req, res) {
   }
 
   jwt.verify(token, config.web.secret, function(err, decoded){
+      // if there is an error return a 500, server error with a message
     if(err){
       return res.status(500).send('Failed to authenticate token.');
     }
 
-    User.getById(decoded.id, function(err, user){
+    // Call the findById method on the mongoose model
+    // calling it directly from the model instead of the exports form the module.
+    User.findById(decoded.id, function(err, user){
+      // if there is an error return a 500, server error with a message
       if(err){
         return res.status(500).send('There was a problem finding the user.')
       }
 
+      // if the user is not defined return a 404 status code
       if(!user){
         return res.status(404).send('No user found.');
       }
 
+      // Return the 200 status code, OK and the user
       res.status(200).send(user);
 
     });
   });
+
 
 };
 
