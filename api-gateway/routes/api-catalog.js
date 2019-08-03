@@ -22,6 +22,12 @@ router.post('/auth/register', auth_controller.user_register);
 // Use the router get method to set the auth/token route
 router.get('/auth/token', auth_controller.user_token);
 
+// Use the router post method to set the auth/login route
+router.post('/auth/login', auth_controller.user_login);
+
+// Use the router post method to set the auth/logout route
+router.get('/auth/logout', auth_controller.user_logout);
+
 // Export the router
 module.exports = router;
 
