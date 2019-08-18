@@ -58,35 +58,21 @@ exports.user_register = function(req, res) {
 ; Description: Verify token on GET
 */
 exports.user_token = function(req, res) {
-  // Declare the token variable and retrieve the token from the headers of the request
-  var token = req.headers['x-access-token'];
-
-  if(!token){
-    return res.status(401).send({auth: false, message: 'No token provided.'});
-  }
-
-  jwt.verify(token, config.web.secret, function(err, decoded){
-      // if there is an error return a 500, server error with a message
+  // Call the getById method on the mongoose model
+  User.getById(req.userId, function(err, user){
+    // if there is an error return a 500, server error with a message
     if(err){
-      return res.status(500).send('Failed to authenticate token.');
+      return res.status(500).send('There was a problem finding the user.')
     }
 
-    // Call the getById method on the mongoose model
-    User.getById(decoded.id, function(err, user){
-      // if there is an error return a 500, server error with a message
-      if(err){
-        return res.status(500).send('There was a problem finding the user.')
-      }
+    // if the user is not defined return a 404 status code
+    if(!user){
+      return res.status(404).send('No user found.');
+    }
 
-      // if the user is not defined return a 404 status code
-      if(!user){
-        return res.status(404).send('No user found.');
-      }
+    // Return the 200 status code, OK and the user
+    res.status(200).send(user);
 
-      // Return the 200 status code, OK and the user
-      res.status(200).send(user);
-
-    });
   });
 };
 

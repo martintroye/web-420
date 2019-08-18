@@ -11,6 +11,8 @@
 
 // Declare the express variable and import the express module
 var express = require('express');
+// Declare the checkToken variable set to an instance of checkToken
+var checkToken = require('../check-token');
 // Declare the router variable set to an instance of the express router
 var router = express.Router();
 // Declare the auth_controller variable and import the authController module
@@ -20,7 +22,7 @@ var auth_controller = require('../controllers/authController');
 router.post('/auth/register', auth_controller.user_register);
 
 // Use the router get method to set the auth/token route
-router.get('/auth/token', auth_controller.user_token);
+router.get('/auth/token', checkToken, auth_controller.user_token);
 
 // Use the router post method to set the auth/login route
 router.post('/auth/login', auth_controller.user_login);
